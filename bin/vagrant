@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require 'vagrant-wrapper'
+#require_relative '../lib/vagrant-wrapper.rb'
+VagrantWrapper.new.execute(ARGV)
+
+# END VAGRANT WRAPPER
