@@ -1,7 +1,17 @@
 #!/usr/bin/env ruby
 
 require 'vagrant-wrapper'
-#require_relative '../lib/vagrant-wrapper.rb'
-VagrantWrapper.new.execute(ARGV)
+
+min_ver = nil
+
+if (i = ARGV.index { |x| x =~ /^--min-ver=/ })
+  min_ver = ARGV.delete_at(i).split('=')[1]
+end
+
+unless min_ver
+  VagrantWrapper.new.execute(ARGV)
+else
+  VagrantWrapper.require_or_help_install(">= #{min_ver}").execute(ARGV)
+end
 
 # END VAGRANT WRAPPER
