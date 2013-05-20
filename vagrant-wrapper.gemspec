@@ -1,7 +1,10 @@
+$:.unshift(File.dirname(__FILE__) + '/lib')
+require 'vagrant-wrapper/version'
+
 Gem::Specification.new do |s|
   s.name        = 'vagrant-wrapper'
-  s.version     = '1.2.1'
-  s.date        = '2013-05-02'
+  s.version     = VagrantWrapper::VERSION
+  s.date        = VagrantWrapper::RELEASE_DATE
 
   s.summary     = "Wrapper/binstub for os packaged version of Vagrant."
   s.description = <<-DESC
