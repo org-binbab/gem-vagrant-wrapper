@@ -14,5 +14,5 @@
 
 class VagrantWrapper
   VERSION = '1.2.1.1'
-  RELEASE_DATE = '2013-05-02'
+  RELEASE_DATE = '2013-05-20'
 end
