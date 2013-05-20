@@ -13,7 +13,7 @@
 #
 
 require 'vagrant-wrapper/exceptions'
-require 'Shellwords'
+require 'shellwords'
 
 # Main class for the VagrantWrapper driver.
 # This driver will search predefined paths for a packaged version of Vagrant,
