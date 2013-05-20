@@ -19,6 +19,7 @@ See https://github.com/org-binbab/gem-vagrant-wrapper for more details.
   s.email       = ["projects@binarybabel.org"]
   s.homepage    = "http://code.binbab.org"
 
+  s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
   s.add_development_dependency "vagrant", "1.0.7"
 
