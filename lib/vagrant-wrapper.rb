@@ -152,7 +152,7 @@ class VagrantWrapper
   def exec_vagrant(*args)
     unless vagrant = find_vagrant
       $stderr.puts "Vagrant is not installed."
-      $stderr.print install_instructions
+      $stderr.print VagrantWrapper.install_instructions
       exit(1)
     end
     args.unshift(vagrant)
