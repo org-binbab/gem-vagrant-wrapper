@@ -22,11 +22,13 @@ require 'shellwords'
 # if the vagrant-wrapper Gem is required in your bundle.
 class VagrantWrapper
 
+  # The string used to detect ourselves and a gem wrapper of ourselves
+  WRAPPER_MARK = "vagrant-wrapper"
+
   def initialize(*args)
     @vagrant_name = "vagrant"
     @vagrant_path = nil
     @search_paths = default_paths + env_paths
-    @wrapper_mark = "END VAGRANT WRAPPER"
 
     # Optional first parameter sets required version.
     unless args.length < 1 or args[0].nil?
@@ -142,7 +144,7 @@ class VagrantWrapper
       @search_paths.each do |path|
         test_bin = "#{path}/#{@vagrant_name}"
         next unless ::File.executable?(test_bin)
-        next if (%x{tail -n1 #{test_bin}}.match(@wrapper_mark) != nil)
+        next if is_wrapper?(test_bin)
         @vagrant_path = test_bin
         break
       end
@@ -175,6 +177,14 @@ class VagrantWrapper
       true
     else
       false
+    end
+  end
+
+  def is_wrapper?(file)
+    if open(file) { |f| f.grep(/#{WRAPPER_MARK}/) }.empty?
+      false
+    else
+      true
     end
   end
 end
