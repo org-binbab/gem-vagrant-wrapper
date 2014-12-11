@@ -90,19 +90,30 @@ class VagrantWrapper
   #   /usr/bin
   #   /bin
   def default_paths
-    %w{
-      /opt/vagrant/bin
-      /usr/local/bin
-      /usr/bin
-      /bin
-    }
+    if windows?
+      %w{
+        C:\HashiCorp\Vagrant\bin
+      }
+    else
+      %w{
+        /opt/vagrant/bin
+        /usr/local/bin
+        /usr/bin
+        /bin
+      }
+    end
   end
 
   # Environment search paths to be used as low priority search.
   def env_paths
     path = ENV['PATH'].to_s.strip
     return [] if path.empty?
-    path.split(':')
+    separator = if windows?
+                  ';'
+                else
+                  ':'
+                end
+    path.split(separator)
   end
 
   def self.install_instructions
@@ -157,5 +168,13 @@ class VagrantWrapper
     end
     args.unshift(vagrant)
     exec(Shellwords.join(args))
+  end
+
+  def windows?
+    if RUBY_PLATFORM =~ /mswin|mingw|windows/
+      true
+    else
+      false
+    end
   end
 end
