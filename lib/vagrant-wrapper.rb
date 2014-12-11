@@ -26,7 +26,7 @@ class VagrantWrapper
   WRAPPER_MARK = "vagrant-wrapper"
 
   def initialize(*args)
-    @vagrant_name = "vagrant"
+    @vagrant_name = windows? ? "vagrant.exe" : "vagrant"
     @vagrant_path = nil
     @search_paths = default_paths + env_paths
 
@@ -142,7 +142,7 @@ class VagrantWrapper
   def find_vagrant
     unless @vagrant_path
       @search_paths.each do |path|
-        test_bin = "#{path}/#{@vagrant_name}"
+        test_bin = "#{path}#{path_separator}#{@vagrant_name}"
         next unless ::File.executable?(test_bin)
         next if is_wrapper?(test_bin)
         @vagrant_path = test_bin
@@ -185,6 +185,14 @@ class VagrantWrapper
       false
     else
       true
+    end
+  end
+
+  def path_separator
+    if windows?
+      File::ALT_SEPARATOR || '\\'.freeze
+    else
+      File::SEPARATOR
     end
   end
 end
