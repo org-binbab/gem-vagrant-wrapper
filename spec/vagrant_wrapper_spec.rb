@@ -34,7 +34,7 @@ describe VagrantWrapper do
     end
 
     context "with good version parameter" do
-      it "does not NOT throw a Version exception" do
+      it "does NOT throw a Version exception" do
         expect {
           @v.require_version("> 1.0")
         }.to_not raise_error
@@ -42,7 +42,7 @@ describe VagrantWrapper do
     end
 
     context "with bad version parameter" do
-      it "does not throw a Version exception" do
+      it "throws a Version exception" do
         expect {
           @v.require_version(">= 4.0")
         }.to raise_error(VagrantWrapper::Exceptions::Version)
@@ -116,7 +116,7 @@ describe VagrantWrapper do
 
   describe "#get_output" do
     context "-v" do
-      it "returns full version string" do
+      it "returns the full version string" do
         output = @v.get_output("-v")
         expect(output).to match(version_regex)
       end
