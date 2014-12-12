@@ -109,7 +109,7 @@ describe VagrantWrapper do
   describe "#vagrant_location" do
     it "exists and contains vagrant" do
       location = @v.vagrant_location
-      expect(location).to match(/vagrant$/)
+      expect(location).to match(/vagrant(\.exe)$/)
       expect(File.exists?(location)).to be true
     end
   end
@@ -206,27 +206,28 @@ describe "bin/vagrant" do
   # 'vagrant -v' => 'Vagrant 1.7.0'
   # earlier versions included the word version in their output
   let(:version_regex) { Regexp.new('^Vagrant (version)?') }
+  let(:vagrant_bin) { "ruby #{Dir.getwd}/bin/vagrant" }
 
   it "returns usage" do
-    expect(%x{./bin/vagrant}).to match(/^Usage/)
+    expect(%x{#{vagrant_bin}}).to match(/^Usage/)
   end
 
   context "-v" do
     it "returns the full version string" do
-      expect(%x{./bin/vagrant -v}).to match(version_regex)
+      expect(%x{#{vagrant_bin} -v}).to match(version_regex)
     end
   end
 
   context "with good min-ver" do
     it "returns the full version string" do
-      expect(%x{./bin/vagrant --min-ver=1.0 -v}).to match(version_regex)
-      expect(%x{./bin/vagrant -v --min-ver=1.0}).to match(version_regex)
+      expect(%x{#{vagrant_bin} --min-ver=1.0 -v}).to match(version_regex)
+      expect(%x{#{vagrant_bin} -v --min-ver=1.0}).to match(version_regex)
     end
   end
 
   context "with bad min-ver" do
     it "prints the instructions" do
-      expect(%x{./bin/vagrant --min-ver=4.0 -v 2>&1}).to match /instructions/
+      expect(%x{#{vagrant_bin} --min-ver=4.0 -v 2>&1}).to match /instructions/
     end
   end
 end
