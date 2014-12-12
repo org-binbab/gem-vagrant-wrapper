@@ -173,19 +173,11 @@ class VagrantWrapper
   end
 
   def windows?
-    if RUBY_PLATFORM =~ /mswin|mingw|windows/
-      true
-    else
-      false
-    end
+    !!(RUBY_PLATFORM =~ /mswin|mingw|windows/)
   end
 
   def is_wrapper?(file)
-    if open(file) { |f| f.grep(/#{WRAPPER_MARK}/) }.empty?
-      false
-    else
-      true
-    end
+    !!(File.readlines(file).grep(/#{WRAPPER_MARK}/).any?)
   end
 
   def path_separator
