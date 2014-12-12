@@ -109,7 +109,7 @@ describe VagrantWrapper do
   describe "#vagrant_location" do
     it "exists and contains vagrant" do
       location = @v.vagrant_location
-      expect(location).to match(/vagrant(\.exe)$/)
+      expect(location).to match(/vagrant(\.exe)?$/)
       expect(File.exists?(location)).to be true
     end
   end
