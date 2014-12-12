@@ -95,6 +95,7 @@ class VagrantWrapper
     if windows?
       %w{
         C:\HashiCorp\Vagrant\bin
+        /c/HashiCorp/Vagrant/bin
       }
     else
       %w{
