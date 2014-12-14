@@ -178,7 +178,7 @@ class VagrantWrapper
   end
 
   def is_wrapper?(file)
-    !!(File.readlines(file).grep(/#{WRAPPER_MARK}/).any?)
+    File.readlines(file).grep(/#{WRAPPER_MARK}/).any?
   end
 
   def path_separator
