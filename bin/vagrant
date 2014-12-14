@@ -1,6 +1,12 @@
 #!/usr/bin/env ruby
 
-require 'vagrant-wrapper'
+begin
+  require 'vagrant-wrapper'
+rescue LoadError
+  # This ensures the integration tests pass if the gem is not installed
+  $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+  retry
+end
 
 min_ver = nil
 
