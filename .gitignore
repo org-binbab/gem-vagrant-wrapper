@@ -1,2 +1,12 @@
+# Gem Building
 doc
 *.gem
+Gemfile.lock
+
+# IDE Excludes
+*.ipr
+*.iws
+.rakeTasks
+
+# Vagrant
+insecure_private_key
