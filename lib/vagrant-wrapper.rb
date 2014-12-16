@@ -81,7 +81,7 @@ class VagrantWrapper
   def vagrant_version
     ver = call_vagrant "-v"
     unless ver.nil?
-      ver = ver[/(\.?[0-9]+)+/]
+      ver = ver[/Vagrant( version)? ([0-9]+(\.[0-9]+)+)/, 2]
     end
     ver
   end
