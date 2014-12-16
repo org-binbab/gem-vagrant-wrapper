@@ -22,11 +22,13 @@ require 'shellwords'
 # if the vagrant-wrapper Gem is required in your bundle.
 class VagrantWrapper
 
+  # The string used to detect ourselves and a gem wrapper of ourselves
+  WRAPPER_MARK = "vagrant-wrapper"
+
   def initialize(*args)
-    @vagrant_name = "vagrant"
+    @vagrant_name = windows? ? "vagrant.exe" : "vagrant"
     @vagrant_path = nil
     @search_paths = default_paths + env_paths
-    @wrapper_mark = "END VAGRANT WRAPPER"
 
     # Optional first parameter sets required version.
     unless args.length < 1 or args[0].nil?
@@ -90,19 +92,31 @@ class VagrantWrapper
   #   /usr/bin
   #   /bin
   def default_paths
-    %w{
-      /opt/vagrant/bin
-      /usr/local/bin
-      /usr/bin
-      /bin
-    }
+    if windows?
+      %w{
+        C:\HashiCorp\Vagrant\bin
+        /c/HashiCorp/Vagrant/bin
+      }
+    else
+      %w{
+        /opt/vagrant/bin
+        /usr/local/bin
+        /usr/bin
+        /bin
+      }
+    end
   end
 
   # Environment search paths to be used as low priority search.
   def env_paths
     path = ENV['PATH'].to_s.strip
     return [] if path.empty?
-    path.split(':')
+    separator = if windows?
+                  ';'
+                else
+                  ':'
+                end
+    path.split(separator)
   end
 
   def self.install_instructions
@@ -129,9 +143,9 @@ class VagrantWrapper
   def find_vagrant
     unless @vagrant_path
       @search_paths.each do |path|
-        test_bin = "#{path}/#{@vagrant_name}"
+        test_bin = "#{path}#{path_separator}#{@vagrant_name}"
         next unless ::File.executable?(test_bin)
-        next if (%x{tail -n1 #{test_bin}}.match(@wrapper_mark) != nil)
+        next if is_wrapper?(test_bin)
         @vagrant_path = test_bin
         break
       end
@@ -152,10 +166,26 @@ class VagrantWrapper
   def exec_vagrant(*args)
     unless vagrant = find_vagrant
       $stderr.puts "Vagrant is not installed."
-      $stderr.print install_instructions
+      $stderr.print VagrantWrapper.install_instructions
       exit(1)
     end
     args.unshift(vagrant)
     exec(Shellwords.join(args))
+  end
+
+  def windows?
+    !!(RUBY_PLATFORM =~ /mswin|mingw|windows/)
+  end
+
+  def is_wrapper?(file)
+    File.readlines(file).grep(/#{WRAPPER_MARK}/).any?
+  end
+
+  def path_separator
+    if windows?
+      File::ALT_SEPARATOR || '\\'.freeze
+    else
+      File::SEPARATOR
+    end
   end
 end
