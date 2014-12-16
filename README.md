@@ -8,14 +8,22 @@ A gem providing access and bundling to the newer packaged versions of Vagrant. (
 
 **Please note:** this Gem does not install any version of Vagrant, it provides a compatibility layer over the newer packaged version. However, functions are included which may be used to guide the installation of Vagrant, when necessary.
 
-**[More information on why this Gem exists can be seen in the Background section below.](#background---aka-the-vagrant-gem-enigma)**
+### Background - AKA the Vagrant Gem Enigma
+
+Examples of the problem this gem solves, and the history behind it, have been moved to the [ENIGMA.md](ENIGMA.md) file.
+
+## Version 2.0 Now Available
+
+- Now supporting Windows!
+- Testing cleaned up and updated to RSpec3
+
+Big thank you to @btm for writing these updates, and @tknerr for helping to test.
+
 
 
 # Installation and Usage
 
 Require the Vagrant Wrapper via your Gemfile, then run `bundle install`.
-
-    source 'https://rubygems.org'
 
     gem 'vagrant-wrapper'
 
@@ -26,54 +34,6 @@ Existing projects which require the old 'vagrant' gem in their Gemfile directly 
 and use the older Gem version, even if they are shelling out as well.
 
 **Please note:** The wrapper searches for a packaged installation of Vagrant first, and then falls back to any version it can find in the PATH. Therefore it will link to the 1.0.x gem version if that's all that is installed, so you should always enforce a minimum Vagrant version, see below.
-
-
-## Gemfile examples
-
-**Let's assume you have both Vagrant 1.0.7 installed via a Gem, and Vagrant 1.2 installed via the official package.**
-
-### A... Older 'vagrant' gemfiles
-
-This older Gemfile will still launch Vagrant 1.0.7, as expected:
-
-**Gemfile**
-
-    source 'https://rubygems.org'
-    gem 'vagrant'
-
-**Output**
-
-    puts %x{vagrant -v}
-    => "Vagrant version 1.0.7"
-
-_Notes below on [VAGRANT_HOME](#vagrant_home) with older versions._
-
-### B... Simply Leaving out 'vagrant'
-
-This is the key problem the Vagrant Wrapper seeks to solve, because otherwise (without uninstalling the vagrant gem), your shell calls will still be routed to 1.0.7.
-
-**Gemfile**
-
-    source 'https://rubygems.org'
-
-**Output**
-
-    puts %x{vagrant -v}
-    => "Vagrant version 1.0.7"
-
-### C... Including 'vagrant-wrapper'
-
-Calls to vagrant now route to the newer packaged version.
-
-**Gemfile**
-
-    source 'https://rubygems.org'
-    gem 'vagrant-wrapper'
-
-**Output**
-
-    puts %x{vagrant -v}
-    => "Vagrant version 1.2.0"
 
 
 ## Shell interaction
@@ -171,34 +131,7 @@ Major differences in Vagrant will refuse to use the same existing shared data di
 
     $ export VAGRANT_HOME=~/.vagrant.old
 
-----------
 
-# Background - AKA the Vagrant Gem enigma
-
-Per the creator's discretion, Vagrant 1.1+ no longer ships in Gem form,
-[see here](https://groups.google.com/d/msg/vagrant-up/kX_wvn7wcds/luwNur4kgDEJ),
-in favor of packaged installers.
-
-There are many ways in which this is a strong move for the project, and in theory Vagrant's ability to use
-its own bundled Ruby allows it to operate in a vacuum. So why does this wrapper exist?
-
-The problem is that Gems do (and will always) exist for the older versions. If they are installed they tend
-to override the system installed version of Vagrant if shell calls are made from within Ruby projects.
-
-As an example, if you have any bundled project that requires the 'vagrant' gem via its Gemfile, and a newer
-project that does not require this Gem (hoping to rely on the system packaged version), you'll find that
-the Gem version of Vagrant will always be called when your program attempts to access Vagrant via a shell
-or subprocess.
-
-This is because the Rubygems bin directory is higher in your PATH, and using "bundle exec" will not help.
-Even though Bundler will attempt to broker between multiple versions of Gems, it cannot handle the choice
-between the Gem version and the system version.
-
-Your only option would be to remove the old vagrant gem between projects, which is cumbersome. Also the problem will recur if you run a "bundle install" on a project which still includes the older Gem. This wrapper
-solves the problem by giving your newer projects something to include and override the older Gem versions
-of Vagrant.
-
-----------
 
 # Development and Maintenance
 
