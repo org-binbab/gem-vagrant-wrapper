@@ -159,7 +159,7 @@ class VagrantWrapper
       return nil
     end
     args.unshift(vagrant)
-    %x{#{Shellwords.join(args)} 2>&1}
+    %x{#{shelljoin(args)} 2>&1}
   end
 
   # Give execution control to Vagrant.
@@ -170,7 +170,15 @@ class VagrantWrapper
       exit(1)
     end
     args.unshift(vagrant)
-    exec(Shellwords.join(args))
+    exec(shelljoin(args))
+  end
+
+  def shelljoin(args)
+    if windows?
+      args.join(' ')
+    else
+      Shellwords.join(args)
+    end
   end
 
   def windows?
