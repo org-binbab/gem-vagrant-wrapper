@@ -200,6 +200,19 @@ describe VagrantWrapper do
       expect(@v.send(:windows?)).to be false
     end
   end
+
+  describe "#shelljoin" do
+    it "escapes properly on windows" do
+      stub_const("RUBY_PLATFORM", "i386-mingw32")
+      expect(@v.send(:shelljoin, ["up", "--no-provision", "--provider=virtualbox"]))
+        .to eq "\"up\" \"--no-provision\" \"--provider=virtualbox\""
+    end
+    it "escapes properly on linux" do
+      stub_const("RUBY_PLATFORM", "x86_64-linux")
+      expect(@v.send(:shelljoin, ["up", "--no-provision", "--provider=virtualbox"]))
+        .to eq "up --no-provision --provider\\=virtualbox"
+    end
+  end
 end
 
 describe "bin/vagrant" do
