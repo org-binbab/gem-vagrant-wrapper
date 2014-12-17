@@ -175,10 +175,15 @@ class VagrantWrapper
 
   def shelljoin(args)
     if windows?
-      args.join(' ')
+      args.collect { |arg| dos_escape(arg) }.join(' ')
     else
       Shellwords.join(args)
     end
+  end
+
+  # borrowed from https://github.com/rubyworks/facets/issues/17
+  def dos_escape(cmdline)
+    '"' + cmdline.gsub(/\\(?=\\*\")/, "\\\\\\").gsub(/\"/, "\\\"").gsub(/\\$/, "\\\\\\").gsub("%", "%%") + '"'
   end
 
   def windows?
