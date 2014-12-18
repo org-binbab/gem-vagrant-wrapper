@@ -13,7 +13,6 @@
 #
 
 require 'vagrant-wrapper/exceptions'
-require 'shellwords'
 
 # Main class for the VagrantWrapper driver.
 # This driver will search predefined paths for a packaged version of Vagrant,
@@ -159,7 +158,7 @@ class VagrantWrapper
       return nil
     end
     args.unshift(vagrant)
-    %x{#{Shellwords.join(args)} 2>&1}
+    %x{#{args.join(' ')} 2>&1}
   end
 
   # Give execution control to Vagrant.
@@ -170,7 +169,7 @@ class VagrantWrapper
       exit(1)
     end
     args.unshift(vagrant)
-    exec(Shellwords.join(args))
+    exec(args.join(' '))
   end
 
   def windows?
