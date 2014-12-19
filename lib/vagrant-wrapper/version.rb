@@ -13,6 +13,6 @@
 #
 
 class VagrantWrapper
-  VERSION = '2.0.1.beta1'
+  VERSION = '2.0.1'
   RELEASE_DATE = '2014-12-16'
 end
