@@ -168,8 +168,7 @@ class VagrantWrapper
       $stderr.print VagrantWrapper.install_instructions
       exit(1)
     end
-    args.unshift(vagrant)
-    exec(args.join(' '))
+    exec(vagrant, *args)
   end
 
   def windows?
