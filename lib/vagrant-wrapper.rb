@@ -176,7 +176,9 @@ class VagrantWrapper
   end
 
   def is_wrapper?(file)
-    File.readlines(file).grep(/#{WRAPPER_MARK}/).any?
+    read_mode = (defined? Encoding) ? {:mode => 'r:ASCII-8BIT'} : 'r'
+    
+    File.readlines(file, read_mode).grep(/#{WRAPPER_MARK}/).any?
   end
 
   def path_separator
