@@ -70,12 +70,12 @@ class VagrantWrapper
       send("exec_vagrant", *args)
     end
   end
-  
+
   # Return the filesystem location of the discovered Vagrant install.
   def vagrant_location
     find_vagrant
   end
-  
+
   # Return the version of the discovered Vagrant install.
   def vagrant_version
     ver = call_vagrant "-v"
@@ -176,7 +176,7 @@ class VagrantWrapper
   end
 
   def is_wrapper?(file)
-    File.readlines(file).grep(/#{WRAPPER_MARK}/).any?
+    File.binread(file).include?(WRAPPER_MARK)
   end
 
   def path_separator

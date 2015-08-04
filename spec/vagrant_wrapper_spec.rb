@@ -167,7 +167,7 @@ describe VagrantWrapper do
 
   describe "#is_wrapper?" do
     let(:temp_file) { Tempfile.new('vagrant_wrapper_spec') }
-    
+
     after do
       temp_file.unlink
     end
@@ -180,6 +180,14 @@ describe VagrantWrapper do
 
     it "returns false when the file does not contain the wrapper mark" do
       temp_file.write("This is a temporary file.\nNothing.\nBye.")
+      temp_file.close
+      expect(@v.send(:is_wrapper?, temp_file.path)).to be false
+    end
+
+    it "returns false when the file is binary and does not contain the wrapper mark" do
+      # NOTE: this was taken from the actual header of /opt/vagrant/bin/vagrant on an OS X
+      # system where vagrant had been installed via "brew cask install brew".
+      temp_file.write("\xCF\xFA\xED\xFE\a\u0000\u0000\u0001\u0003\u0000\u0000\u0000\u0002\u0000\u0000\u0000\t\u0000\u0000\u0000H\b\u0000\u0000\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0019\u0000\u0000\u0000H\u0000\u0000\u0000__PAGEZERO\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000")
       temp_file.close
       expect(@v.send(:is_wrapper?, temp_file.path)).to be false
     end
