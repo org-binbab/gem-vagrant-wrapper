@@ -117,6 +117,16 @@ This will cause vagrant to become the main process, as if you'd called it on the
  puts "This line would never be printed."
 ```
 
+### Running vagrant without handing control over
+
+This is an alternative to calling vagrant with backticks.
+
+```ruby
+ require 'vagrant-wrapper'
+ VagrantWrapper.new.run "up"
+ puts "This line will be printed."
+```
+
 
 ## Versioning
 
