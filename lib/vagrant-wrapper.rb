@@ -71,6 +71,19 @@ class VagrantWrapper
     end
   end
 
+  # Run the discovered version of Vagrant.
+  # The given arguments (if any) are passed along to the command line.
+  #
+  # The vagrant process will NOT replace this process entirely, while still
+  # operating and outputting in an unmodified state.
+  def run(*args)
+    if args.length > 0 && args[0].is_a?(Array)
+      send("run_vagrant", *args[0])
+    else
+      send("run_vagrant", *args)
+    end
+  end
+
   # Return the filesystem location of the discovered Vagrant install.
   def vagrant_location
     find_vagrant
@@ -169,6 +182,16 @@ class VagrantWrapper
       exit(1)
     end
     exec(vagrant, *args)
+  end
+
+  # Don't give execution control to Vagrant.
+  def run_vagrant(*args)
+    unless vagrant = find_vagrant
+      $stderr.puts "Vagrant is not installed."
+      $stderr.print VagrantWrapper.install_instructions
+      exit(1)
+    end
+    system(vagrant, *args)
   end
 
   def windows?
